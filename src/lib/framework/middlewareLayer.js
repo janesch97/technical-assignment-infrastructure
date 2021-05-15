@@ -5,7 +5,7 @@ class MiddlewareLayer {
     this.#stack = [];
   }
 
-  use(middleware) {
+  register(middleware) {
     if (typeof middleware !== 'function') {
       throw new TypeError('Middleware must be a function');
     }

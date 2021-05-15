@@ -13,19 +13,53 @@ class WebApp {
     this.#middlewareLayer = new MiddlewareLayer();
   }
 
-  start() {
-    // TODO: Implement start(port)
-    return http.createServer().listen();
+  start(port) {
+    return http.createServer(async (req, res) => {
+      if (req.method === 'POST' || req.method === 'PUT') {
+        const body = await this.#parseBodyJson(req);
+        req.body = body || {};
+      }
+
+      try {
+        this.#runMiddleware(req, res);
+      } catch (error) {
+        console.error(error);
+
+        res.statusCode = error.statusCode || 500;
+        res.end(error.message);
+      }
+
+      if (!res.headersSent) {
+        if (res.body) {
+          res.write(JSON.stringify(res.body));
+        }
+        res.statusCode = 200;
+        res.end();
+      }
+    }).listen(port);
   }
 
   use(middleware) {
-    return this.#middlewareLayer.use(middleware);
+    this.#middlewareLayer.register(middleware);
+    return this;
   }
 
   #runMiddleware(req, res) {
-    return this.#middlewareLayer.run(req, res);
+    this.#middlewareLayer.run(req, res);
   }
 
+  #parseBodyJson(req) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      req.on('data', (chunk) => {
+        data.push(chunk);
+      });
+      req.on('end', () => {
+        resolve(JSON.parse(data));
+      });
+      req.on('error', (error) => reject(error));
+    });
+  }
 }
 
 module.exports = WebApp;
