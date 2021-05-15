@@ -1,15 +1,28 @@
-/**
- * Router plugin implementation - write your code here
- *
- * This module should export your implementation of Router class.
- */
 class Router {
-  get() {
-    // TODO: Implement get(route, handler)
+  #routeTable;
+
+  constructor() {
+    this.#routeTable = {};
   }
 
-  post() {
-    // TODO: Implement post(route, handler)
+  #registerRoute(path, method, handler) {
+    this.#routeTable[path] = { ...this.#routeTable, [method]: handler };
+  }
+
+  get(path, handler) {
+    this.#registerRoute(path, 'GET', handler);
+  }
+
+  post(path, handler) {
+    this.#registerRoute(path, 'POST', handler);
+  }
+
+  put(path, handler) {
+    this.#registerRoute(path, 'PUT', handler);
+  }
+
+  delete(path, handler) {
+    this.#registerRoute(path, 'DELETE', handler);
   }
 
   routes() {
