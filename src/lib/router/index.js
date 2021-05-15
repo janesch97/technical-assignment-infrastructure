@@ -14,6 +14,7 @@ class Router {
 
   routes() {
     // TODO: Implement routes(options)
+    return new Function();
   }
 }
 
