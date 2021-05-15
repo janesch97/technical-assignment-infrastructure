@@ -1,33 +1,40 @@
 class Router {
   #routeTable;
 
+  static #supportedHttpMethods = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE'
+  ]
+
   constructor() {
     this.#routeTable = {};
+
+    for (const method of Router.#supportedHttpMethods) {
+      this[method.toLowerCase()] = (path, handler) => {
+        this.registerRoute(path, method, handler);
+      };
+    }
   }
 
-  #registerRoute(path, method, handler) {
+  registerRoute(path, method, handler) {
+    if (typeof handler !== 'function') {
+      throw new TypeError('Route handler must be a function');
+    }
+
+    if (this.#routeTable[path]?.[method]) {
+      throw new Error(`Route ${method} ${path} already registred`);
+    }
+
     this.#routeTable[path] = { ...this.#routeTable, [method]: handler };
   }
 
-  get(path, handler) {
-    this.#registerRoute(path, 'GET', handler);
-  }
+  routes({ prefix }) {
+    return (req, res, next) => {
 
-  post(path, handler) {
-    this.#registerRoute(path, 'POST', handler);
-  }
-
-  put(path, handler) {
-    this.#registerRoute(path, 'PUT', handler);
-  }
-
-  delete(path, handler) {
-    this.#registerRoute(path, 'DELETE', handler);
-  }
-
-  routes() {
-    // TODO: Implement routes(options)
-    return new Function();
+      next();
+    };
   }
 }
 
