@@ -27,7 +27,7 @@ class Router {
       throw new Error(`Route ${method} ${path} already registred`);
     }
 
-    this.#routeTable[path] = { ...this.#routeTable, [method]: handler };
+    this.#routeTable[path] = { ...this.#routeTable[path], [method]: handler };
   }
 
   routes({ prefix }) {
