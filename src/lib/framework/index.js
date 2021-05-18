@@ -55,13 +55,17 @@ class WebApp {
         data.push(chunk);
       });
       req.on('end', () => {
-        const json = Buffer.concat(data).toString();
-        try
-        {
-          resolve(JSON.parse(json));
-        } catch (error) {
-          reject(error);
+        const jsonString = Buffer.concat(data).toString();
+
+        if (jsonString) {
+          try {
+            resolve(JSON.parse(jsonString));
+          } catch (error) {
+            reject(error);
+          }
         }
+
+        resolve({});
       });
       req.on('error', (error) => reject(error));
     });
