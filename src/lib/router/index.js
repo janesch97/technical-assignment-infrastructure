@@ -43,6 +43,17 @@ class Router {
     return false;
   }
 
+  #parseQueryString(uri) {
+    const query = {};
+
+    if (uri) {
+      const regexp = new RegExp(/([^?&=]+)(?:=([^&]*))?/g);
+      uri.replace(regexp, (_, key, value) => query[key] = value);
+    }
+
+    return query;
+  }
+
   registerRoute(path, method, handler) {
     if (typeof handler !== 'function') {
       throw new TypeError('Route handler must be a function');
@@ -62,14 +73,21 @@ class Router {
         const routes = Object.entries(this.#routeTable[path]);
         for (const route in routes) {
           const [method, handler] = routes[route];
-          const params = this.#parsePath(prefix + path, req.url);
+          const [uriPath, queryString] = req.url.split(/\?(.*)/);
+
+          const params = this.#parsePath(prefix + path, uriPath);
 
           if (params && req.method === method) {
+            req.query = this.#parseQueryString(queryString);
             req.params = params;
             handler(req, res);
             matched = true;
             break;
           }
+        }
+
+        if (matched) {
+          break;
         }
       }
 
