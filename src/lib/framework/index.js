@@ -15,12 +15,12 @@ class WebApp {
 
   start(port) {
     return http.createServer(async (req, res) => {
-      if (req.method === 'POST' || req.method === 'PUT') {
-        const body = await this.#parseBodyJson(req);
-        req.body = body || {};
-      }
-
       try {
+        if (req.method === 'POST' || req.method === 'PUT') {
+          const body = await this.#parseBodyJson(req);
+          req.body = body || {};
+        }
+
         this.#runMiddleware(req, res);
       } catch (error) {
         console.error(error);
