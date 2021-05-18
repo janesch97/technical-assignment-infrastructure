@@ -111,4 +111,21 @@ Good luck! :rocket:
 
 # Technical assignment - documentation
 
-TODO: add any general/docker documentation here
+- [Web app framework documentation](./src/lib/framework/README.md) 
+- [Routing middleware documentation](./src/lib/framework/README.md)
+
+## Building a Docker image
+
+- Running the following command will build the docker container image from the included `Dockerfile`. The generated container will run the app and expose it on port 3000:
+
+```bash
+sudo docker build . -t <image-name>
+```
+
+## Running the application in a container
+
+- Running the following command will run the application inside a docker container on some arbitrary port:
+ 
+```bash
+sudo docker run -p <port>:3000 -d <image-name>
+```
