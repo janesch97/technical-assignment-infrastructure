@@ -1,8 +1,3 @@
-/**
- * Web framework implementation - write your code here
- *
- * This module should export your implementation of WebApp class.
- */
 const http = require('http');
 const MiddlewareLayer = require('./middlewareLayer');
 
@@ -15,12 +10,12 @@ class WebApp {
 
   start(port) {
     return http.createServer(async (req, res) => {
-      if (req.method === 'POST' || req.method === 'PUT') {
-        const body = await this.#parseBodyJson(req);
-        req.body = body || {};
-      }
-
       try {
+        if (req.method === 'POST' || req.method === 'PUT') {
+          const body = await this.#parseBodyJson(req);
+          req.body = body || {};
+        }
+
         this.#runMiddleware(req, res);
       } catch (error) {
         console.error(error);
@@ -55,7 +50,17 @@ class WebApp {
         data.push(chunk);
       });
       req.on('end', () => {
-        resolve(JSON.parse(data));
+        const jsonString = Buffer.concat(data).toString();
+
+        if (jsonString) {
+          try {
+            resolve(JSON.parse(jsonString));
+          } catch (error) {
+            reject(error);
+          }
+        }
+
+        resolve({});
       });
       req.on('error', (error) => reject(error));
     });

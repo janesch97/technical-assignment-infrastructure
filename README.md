@@ -112,7 +112,7 @@ Good luck! :rocket:
 # Technical assignment - documentation
 
 - [Web app framework documentation](./src/lib/framework/README.md) 
-- [Routing middleware documentation](./src/lib/framework/README.md)
+- [Routing middleware documentation](./src/lib/router/README.md)
 
 ## Building a Docker image
 
