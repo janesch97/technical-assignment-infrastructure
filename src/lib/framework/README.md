@@ -13,7 +13,10 @@ WebApp is a minimalistic, middleware-based Web framework for Node.js.
   });
   ```
 
+  * `use` method takes only one parameter:
+    * `middleware` - middleware function to be run on each request to the server
   * `use` method returns the current WebApp instance, so the calls are chainable
+  * registered middleware are run in "first in, first out" order
 
 * Middleware logic is implemented in `MiddlewareLayer` class. It exposes two methods, one for registering the middleware, other one for running middleware functions in the stack in the order they were registered.
 
@@ -30,6 +33,7 @@ WebApp is a minimalistic, middleware-based Web framework for Node.js.
   app.start(1337);
   ```
 
+  * `start` method takes `port` parameter. It's the port HTTP server will run on
   * `start` method returns a `http.Server` instance, so you could programmatically close the server or attach additional event handlers
 
 ## Basic web app example

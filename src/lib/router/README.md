@@ -69,3 +69,7 @@ router.get('/', (req, res) => {
 // with a WebApp instance
 app.use(router.route({ prefix: '/cats' }));
 ```
+
+## Possible improvements
+
+* While the current routing middleware does check for duplicate routes, it does not check for duplicate path prefixes. This could be solved by using a simple array to store all prefixes and check for duplicates during building of the final routing middleware
